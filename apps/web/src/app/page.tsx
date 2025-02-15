@@ -5,7 +5,7 @@ import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { api } from "@/lib/api"
+import { api } from "../../../../src/lib/api"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -171,9 +171,9 @@ export default function Home() {
 
       Evaluation criteria:
       - effectiveness score should be 0-100
-      - arguments should be at least 10 words long to be considered valid
+      - arguments should be at least 5 words long to be considered valid
       - each argument must present a clear position or claim
-      - pros and cons arrays should contain 2-5 items each
+      - pros and cons arrays should contain 0-5 items each
       - validation errors should be provided if either argument is invalid
 
       Arguments to evaluate:
@@ -189,7 +189,6 @@ export default function Home() {
           "pros": string[],
           "cons": string[],
           "keyPoints": string[],
-          "reasoningScore": number
         },
         "argument_2": {
           "isValidArgument": boolean,
@@ -197,7 +196,6 @@ export default function Home() {
           "pros": string[],
           "cons": string[],
           "keyPoints": string[],
-          "reasoningScore": number
         },
         "validationErrors": [
           {
@@ -317,7 +315,7 @@ export default function Home() {
   }
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
+    <div className="relative w-screen h-screen flex items-center justify-center">
       {showForm ? (
         <ArgumentForm />
       ) : (

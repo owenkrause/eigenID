@@ -15,6 +15,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
+      "@src/*": ["../src/*"],
       "@layr-labs/agentkit-witnesschain": ["node_modules/@layr-labs/agentkit-witnesschain/dist/src/index.js"],
       "@layr-labs/agentkit-witnesschain/*": ["node_modules/@layr-labs/agentkit-witnesschain/dist/src/*"]
     }
