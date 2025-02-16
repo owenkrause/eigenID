@@ -15,7 +15,7 @@ export default {
     const messagesArray = Array.from(messages.values());
 
     try { 
-      const response = await api.generateText(CHARACTER, { person1: messagesArray[2].content, person2: messagesArray[1] });
+      const response = await api.generateText(CHARACTER, { person1: messagesArray[2].content, person2: messagesArray[1].content });
       const jsonString = response.content.replace(/```json|```/g, '').trim();
       const result = JSON.parse(jsonString)
       let verdict = `I have reached my verdict. ${result.summary.winningReason}`
