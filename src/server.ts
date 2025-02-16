@@ -35,14 +35,16 @@ app.post("/api/generate", async (req, res) => {
       return res.status(503).json({ error: "Agent not ready" });
     }
 
-    const { prompt } = req.body;
+    const { characterType, args } = req.body;
     
-    if (!prompt) {
+    if (!characterType) {
       return res.status(400).json({ error: "Prompt is required" });
     }
+    if (!args) {
+      return res.status(400).json({ error: "Two arguments are required" });
+    }
 
-    console.log("Generating text for prompt:", prompt);
-    const result = await agent.generateVerifiableText(prompt);
+    const result = await agent.generateVerifiableText(characterType, args);
     console.log("Generation result:", result);
     res.json(result);
   } catch (error) {

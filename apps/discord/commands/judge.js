@@ -1,6 +1,8 @@
 import { SlashCommandBuilder } from "discord.js";
 import { api } from "../../../src/lib/api.ts";
 
+const CHARACTER = "troll";
+
 export default {
   data: new SlashCommandBuilder()
     .setName("judge")
@@ -12,56 +14,11 @@ export default {
     const messages = await interaction.channel.messages.fetch({ limit: 3 });
     const messagesArray = Array.from(messages.values());
 
-    const prompt = `
-    you are a judge evaluating the validity of each argument. 
-    your task is to analyze the provided arguments and respond with ONLY a valid JSON object.
-    DO NOT include any other text, markdown, or formatting.
-
-    Evaluation criteria:
-    - effectiveness score should be 0-100
-    - arguments should be at least 5 words long to be considered valid
-    - each argument must present a clear position or claim
-    - pros and cons arrays should contain 0-5 items each
-    - validation errors should be provided if either argument is invalid
-
-    Arguments to evaluate:
-    Person 1: ${messagesArray[2].content}
-    Person 2: ${messagesArray[1].content}
-
-    Respond with an object in this exact format:
-    { 
-      "winner": "argument_1" | "argument_2 | neither",
-      "argument_1": {
-        "isValidArgument": boolean,
-        "effectiveness": number,
-        "pros": string[],
-        "cons": string[],
-        "keyPoints": string[],
-      },
-      "argument_2": {
-        "isValidArgument": boolean,
-        "effectiveness": number,
-        "pros": string[],
-        "cons": string[],
-        "keyPoints": string[],
-      },
-      "validationErrors": [
-        {
-          "code": "one of: INVALID_ARG_1, INVALID_ARG_2, INVALID_ARG_BOTH, INSUFFICIENT_LENGTH, NO_CLEAR_POSITION",
-          "message": "detailed explanation of what's missing"
-        }
-      ],
-      "summary": {
-        "winningReason": string,
-        "mainDifference": string
-      }
-    }`;
-
     try { 
-      const response = await api.generateText(prompt);
+      const response = await api.generateText(CHARACTER, { person1: messagesArray[2].content, person2: messagesArray[1] });
       const jsonString = response.content.replace(/```json|```/g, '').trim();
       const result = JSON.parse(jsonString)
-      let verdict = `I have reached my verdict. ${result.summary.mainDifference}`
+      let verdict = `I have reached my verdict. ${result.summary.winningReason}`
       if (result.validationErrors) {
         for (const err of result.validationErrors) {
           verdict += ` ${err.message} `

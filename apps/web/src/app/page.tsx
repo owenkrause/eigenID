@@ -5,11 +5,13 @@ import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { api } from "../../../../src/lib/api"
+import { api } from "@/lib/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+
+const CHARACTER = "normal";
 
 const formSchema = z.object({
   person1Argument: z.string().min(1, {
@@ -164,64 +166,19 @@ export default function Home() {
     
     setIsLoading(true);
     try {
-      const prompt = `
-      you are a judge evaluating the validity of each argument. 
-      your task is to analyze the provided arguments and respond with ONLY a valid JSON object.
-      DO NOT include any other text, markdown, or formatting.
-
-      Evaluation criteria:
-      - effectiveness score should be 0-100
-      - arguments should be at least 5 words long to be considered valid
-      - each argument must present a clear position or claim
-      - pros and cons arrays should contain 0-5 items each
-      - validation errors should be provided if either argument is invalid
-
-      Arguments to evaluate:
-      Person 1: ${args.person1}
-      Person 2: ${args.person2}
-
-      Respond with an object in this exact format:
-      { 
-        "winner": "argument_1" | "argument_2 | neither",
-        "argument_1": {
-          "isValidArgument": boolean,
-          "effectiveness": number,
-          "pros": string[],
-          "cons": string[],
-          "keyPoints": string[],
-        },
-        "argument_2": {
-          "isValidArgument": boolean,
-          "effectiveness": number,
-          "pros": string[],
-          "cons": string[],
-          "keyPoints": string[],
-        },
-        "validationErrors": [
-          {
-            "code": "one of: INVALID_ARG_1, INVALID_ARG_2, INVALID_ARG_BOTH, INSUFFICIENT_LENGTH, NO_CLEAR_POSITION",
-            "message": "detailed explanation of what's missing"
-          }
-        ],
-        "summary": {
-          "winningReason": string,
-          "mainDifference": string
-        }
-      }`;
-
-      const response = await api.generateText(prompt);
+      const response = await api.generateText(CHARACTER, args);
       const jsonString = response.content.replace(/```json|```/g, '').trim();
       const result = JSON.parse(jsonString)
-      let verdict = `I have reached my verdict. ${result.summary.mainDifference}.`
+      let verdict = `I have reached my verdict. ${result.summary.mainDifference}`
       switch (result.winner) {
         case "neither": 
           verdict += "Because of this, neither side wins."
           break
         case "argument_1":
-          verdict += `With an effectiveness of ${result.argument_1.effectiveness} vs ${result.argument_2.effectiveness}, person one wins.`
+          verdict += ` With an effectiveness of ${result.argument_1.effectiveness} vs ${result.argument_2.effectiveness}, person one wins.`
           break
         case "argument_2":
-          verdict += `With an effectiveness of ${result.argument_2.effectiveness} vs ${result.argument_1.effectiveness}, person two wins.`
+          verdict += ` With an effectiveness of ${result.argument_2.effectiveness} vs ${result.argument_1.effectiveness}, person two wins.`
           break
       }
 

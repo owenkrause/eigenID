@@ -20,6 +20,9 @@
     "witnesschain",
     "verifiable-ai"
   ],
+  "workspaces": [
+    "judge"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
