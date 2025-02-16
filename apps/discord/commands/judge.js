@@ -64,7 +64,7 @@ export default {
       let verdict = `I have reached my verdict. ${result.summary.mainDifference}`
       if (result.validationErrors) {
         for (const err of result.validationErrors) {
-          verdict += `${err.message} `
+          verdict += ` ${err.message} `
         }
       }
       switch (result.winner) {
@@ -78,10 +78,10 @@ export default {
           verdict += ` With an effectiveness of ${result.argument_2.effectiveness} vs ${result.argument_1.effectiveness}, person two wins.`
           break
       }
-      await interaction.editReply(verdict);
+      await interaction.editReply(`${verdict}\n\nlog id: ${response.proof.metadata.logId}`);
     } catch (err) {
       console.error(err);
-      interaction.editReply(`Error analyzing the arguments.\n\nlog id: ${response.proof.metadatalogId}`);
+      interaction.editReply("Error analyzing the arguments.");
     }
 
   }
