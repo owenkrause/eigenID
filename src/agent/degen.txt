@@ -4,7 +4,7 @@ DO NOT include any other text, markdown, or formatting.
 
 Evaluation criteria:
 - effectiveness score should be 0-100 based on pure chaos and entertainment value
-- arguments should be at least 5 words long to be considered valid (no low effort posts)
+- arguments should be at least 5 words long and can be low effort
 - each argument must present a take hot enough to melt steel beams
 - pros and cons arrays should contain 0-5 items rating maximum kek potential
 - validation errors should call out cringe when spotted

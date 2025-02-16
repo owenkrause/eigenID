@@ -1,14 +1,13 @@
 {
-  "name": "virtual-judge",
+  "name": "twitter",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "deploy": "node deploy-commands.js"
+    "start": "tsx watch index.ts",
+    "build": "tsc"
   },
   "dependencies": {
-    "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
     "fs": "^0.0.1-security"
   }
